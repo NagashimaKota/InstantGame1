@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour {
 
-    private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f);
+    private Vector2 mousePos = Vector2.zero;
+
+    private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
     
     // Use this for initialization
@@ -17,12 +19,22 @@ public class PlayerMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        int horizontal = 0;
-        int vertical = 0;
+        
 
-        //キーボード用
-        horizontal = (int)Input.GetAxisRaw("Horizontal");
-        vertical = (int)Input.GetAxisRaw("Vertical");
+        //マウス操作用 Input
+        if (Input.GetMouseButtonDown(0))
+        {
+            mousePos = Input.mousePosition;
+
+        }
+
+        //マウス操作用 Output
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 power = Input.mousePosition;
+            mousePos -= power;
+            pl.AddForce(mousePos);
+        }
 
 
         //タッチ数１以上
@@ -41,11 +53,14 @@ public class PlayerMove : MonoBehaviour {
             if (myTouch.phase == TouchPhase.Ended)
             {
                 Vector2 power = touchOrigin - myTouch.position;
-
                 pl.AddForce(power);
             }
-
-
         }
+    }
+
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        
     }
 }
