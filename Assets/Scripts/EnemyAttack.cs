@@ -8,7 +8,7 @@ public class EnemyAttack : MonoBehaviour {
     private GameObject player;
 
     private bool turn = true;
-    private int buretNum = 20;
+    private int buretNum = 10;
 
     // Use this for initialization
     void Start () {
@@ -25,7 +25,7 @@ public class EnemyAttack : MonoBehaviour {
         if (turn == false)
         {
             
-            Debug.Log("False");
+            //Debug.Log("False");
             //Attack();
             Invoke( "Attack", 2);
             pl_sc.PLTurn();
@@ -47,9 +47,9 @@ public class EnemyAttack : MonoBehaviour {
 
             speed.x = Random.Range(-1.0f, 1.0f) * power;
             speed.y = Random.Range(-1.0f, 1.0f) * power;
-
-            Debug.Log(speed.x);
-            Debug.Log(speed.y);
+            
+            //Debug.Log(speed.x);
+            //Debug.Log(speed.y);
 
 
             GameObject effeck = Instantiate(attackPrefab);

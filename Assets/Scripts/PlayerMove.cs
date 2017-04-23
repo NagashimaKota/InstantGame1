@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
 
+    private int plLife = 100;
+    private int emLife = 1000;
     private bool turn = true;
-
-
+    
     private Vector2 mousePos = Vector2.zero;
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
+
+
+    public Text plHP;
+    public Text emHP;
 
 
     // Use this for initialization
@@ -19,6 +25,8 @@ public class PlayerMove : MonoBehaviour
     {
 
         pl = GetComponent<Rigidbody2D>();
+        plHP.text = " PL Life: " + plLife;
+        emHP.text = " EM Life: " + emLife;
 
     }
 
@@ -29,7 +37,10 @@ public class PlayerMove : MonoBehaviour
         {
             Attack();
         }
-        
+
+        plHP.text = "PL Life: " + plLife;
+        emHP.text = "EM Life: " + emLife;
+
     }
 
     void Attack()
@@ -141,5 +152,25 @@ public class PlayerMove : MonoBehaviour
     public void PLTurn()
     {
         turn = true;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "move1")
+        {
+            plLife -= 5;
+            Debug.Log(plLife);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+
+        if (col.gameObject.tag == "Enemy")
+        {
+            emLife -= 50;
+            Debug.Log(emLife);
+        }
+
     }
 }
