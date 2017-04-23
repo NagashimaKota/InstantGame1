@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -11,12 +12,17 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
+    public Text ClearText;
+    public Text OverText;
+
     // Use this for initialization
     void Start()
     {
 
         pl = GetComponent<Rigidbody2D>();
 
+        ClearText.gameObject.SetActive(false);
+        OverText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -101,5 +107,17 @@ public class PlayerMove : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
 
+        if (col.collider.tag == "Enemy")
+        {
+            ClearText.gameObject.SetActive(true);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "E_attack")
+        {
+            OverText.gameObject.SetActive(true);
+            Destroy(other.gameObject);
+        }
     }
 }
