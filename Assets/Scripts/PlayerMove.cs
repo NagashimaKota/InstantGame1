@@ -15,10 +15,8 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
-
     public Text plHP;
     public Text emHP;
-
 
     // Use this for initialization
     void Start()
@@ -116,6 +114,7 @@ public class PlayerMove : MonoBehaviour
             {
                 mousePos = Vector2.zero;
             }
+
             Debug.Log(mousePos);
             pl.AddForce(mousePos);
         }
@@ -165,12 +164,12 @@ public class PlayerMove : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-
+        
         if (col.gameObject.tag == "Enemy")
         {
             emLife -= 50;
             Debug.Log(emLife);
         }
-
+        
     }
 }
