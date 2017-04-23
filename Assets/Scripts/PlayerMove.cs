@@ -15,6 +15,9 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
+
+    public Text ClearText;
+    public Text OverText;
     public Text plHP;
     public Text emHP;
 
@@ -26,7 +29,10 @@ public class PlayerMove : MonoBehaviour
         plHP.text = " PL Life: " + plLife;
         emHP.text = " EM Life: " + emLife;
 
+        ClearText.gameObject.SetActive(false);
+        OverText.gameObject.SetActive(false);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -38,7 +44,6 @@ public class PlayerMove : MonoBehaviour
 
         plHP.text = "PL Life: " + plLife;
         emHP.text = "EM Life: " + emLife;
-
     }
 
     void Attack()
@@ -58,7 +63,6 @@ public class PlayerMove : MonoBehaviour
 
             Vector2 power = Input.mousePosition;
             mousePos -= power;
-
             //最大、最小設定
             //x,yどちらも強い
             if (Math.Abs(mousePos.x) >= Math.Abs(maxPower.x) && Math.Abs(mousePos.y) >= Math.Abs(maxPower.y))
@@ -114,7 +118,6 @@ public class PlayerMove : MonoBehaviour
             {
                 mousePos = Vector2.zero;
             }
-
             Debug.Log(mousePos);
             pl.AddForce(mousePos);
         }
@@ -153,22 +156,30 @@ public class PlayerMove : MonoBehaviour
         turn = true;
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (col.tag == "move1")
+        if (other.gameObject.tag == "Enemy")
+        {
+            emLife -= 50;
+            Debug.Log(emLife);
+        }
+        if (emLife <= 0)
+        {
+            ClearText.gameObject.SetActive(true);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "E_attack")
         {
             plLife -= 5;
             Debug.Log(plLife);
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D col)
-    {
         
-        if (col.gameObject.tag == "Enemy")
+        if (plLife<=0)
         {
-            emLife -= 50;
-            Debug.Log(emLife);
+            OverText.gameObject.SetActive(true);
+            Destroy(other.gameObject);
         }
         
     }
