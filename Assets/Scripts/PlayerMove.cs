@@ -6,10 +6,13 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
 
-    private Vector2 mousePos = Vector2.zero;
+    private bool turn = true;
 
+
+    private Vector2 mousePos = Vector2.zero;
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
+
 
     // Use this for initialization
     void Start()
@@ -22,9 +25,16 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (turn == true)
+        {
+            Attack();
+        }
+        
+    }
 
-
-
+    void Attack()
+    {
+        
         //マウス操作用 Input
         if (Input.GetMouseButtonDown(0))
         {
@@ -39,11 +49,15 @@ public class PlayerMove : MonoBehaviour
 
             Vector2 power = Input.mousePosition;
             mousePos -= power;
+
             //最大、最小設定
             //x,yどちらも強い
             if (Math.Abs(mousePos.x) >= Math.Abs(maxPower.x) && Math.Abs(mousePos.y) >= Math.Abs(maxPower.y))
+            {
                 if (mousePos.x < 0 && mousePos.y < 0)
+                {
                     mousePos = -maxPower;
+                }
                 else if (mousePos.x < 0 && mousePos.y > 0)
                 {
                     mousePos.x = -maxPower.x;
@@ -55,22 +69,42 @@ public class PlayerMove : MonoBehaviour
                     mousePos.y = -maxPower.y;
                 }
                 else
+                {
                     mousePos = maxPower;
+                }
+                turn = false;
+            }
             //xが強い
             else if (Math.Abs(mousePos.x) >= Math.Abs(maxPower.x))
+            {
                 if (mousePos.x < 0)
+                {
                     mousePos.x = -maxPower.x;
+                }
                 else
+                {
                     mousePos.x = maxPower.x;
+                }
+                turn = false;
+            }
             //yが強い
             else if (Math.Abs(mousePos.y) >= Math.Abs(maxPower.y))
+            {
                 if (mousePos.y < 0)
+                {
                     mousePos.y = -maxPower.y;
+                }
                 else
+                {
                     mousePos.y = maxPower.y;
+                }
+                turn = false;
+            }
             //xまたはyが弱い(最小設定)
             else if (Math.Abs(mousePos.x) <= 20 || Math.Abs(mousePos.y) <= 20)
+            {
                 mousePos = Vector2.zero;
+            }
             Debug.Log(mousePos);
             pl.AddForce(mousePos);
         }
@@ -93,13 +127,19 @@ public class PlayerMove : MonoBehaviour
             {
                 Vector2 power = touchOrigin - myTouch.position;
                 pl.AddForce(power);
+                turn = false;
             }
         }
     }
 
 
-    void OnCollisionEnter2D(Collision2D col)
+    public bool EMTurn()
     {
+        return turn;
+    }
 
+    public void PLTurn()
+    {
+        turn = true;
     }
 }
