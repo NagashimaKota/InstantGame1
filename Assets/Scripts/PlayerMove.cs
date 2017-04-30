@@ -15,6 +15,8 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
+    private GameObject child;
+
     public Text ClearText;
     public Text OverText;
     public Text plHP;
@@ -28,6 +30,8 @@ public class PlayerMove : MonoBehaviour
 
         ClearText.gameObject.SetActive(false);
         OverText.gameObject.SetActive(false);
+
+        child = transform.FindChild("Arrow").gameObject;
     }
     
     void Update()
@@ -41,16 +45,13 @@ public class PlayerMove : MonoBehaviour
         emHP.text = "EM Life: " + emLife;
     }
 
-    void OnMouseDown()
-    {
-        Debug.Log("nnjdsvkdsjnvjfsovfdsnfdskhfnkdsl");
-    }
 
     void Attack()
     {
         //マウス操作用 Input
         if (Input.GetMouseButtonDown(0))
         {
+            child.transform.rotation = new Quaternion(0, 0, 180, 0);
             mousePos = Input.mousePosition;
         }
 
@@ -117,6 +118,12 @@ public class PlayerMove : MonoBehaviour
             {
                 mousePos = Vector2.zero;
             }
+            child.transform.localScale = new Vector2(1.0f, mousePos.y/15);
+            if(mousePos.x*mousePos.y<0)
+                child.transform.Rotate(0, 0, Math.Abs((float)Math.Atan(mousePos.y/mousePos.x)*180/(float)Math.PI));
+            else
+                child.transform.Rotate(0, 0, -Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+            Debug.Log(Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
             pl.AddForce(mousePos);
         }
 
