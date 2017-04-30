@@ -15,16 +15,13 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
-
     public Text ClearText;
     public Text OverText;
     public Text plHP;
     public Text emHP;
-
-    // Use this for initialization
+    
     void Start()
     {
-
         pl = GetComponent<Rigidbody2D>();
         plHP.text = " PL Life: " + plLife;
         emHP.text = " EM Life: " + emLife;
@@ -32,9 +29,7 @@ public class PlayerMove : MonoBehaviour
         ClearText.gameObject.SetActive(false);
         OverText.gameObject.SetActive(false);
     }
-
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (turn == true)
@@ -46,9 +41,13 @@ public class PlayerMove : MonoBehaviour
         emHP.text = "EM Life: " + emLife;
     }
 
+    void OnMouseDown()
+    {
+        Debug.Log("nnjdsvkdsjnvjfsovfdsnfdskhfnkdsl");
+    }
+
     void Attack()
     {
-        
         //マウス操作用 Input
         if (Input.GetMouseButtonDown(0))
         {
@@ -118,7 +117,6 @@ public class PlayerMove : MonoBehaviour
             {
                 mousePos = Vector2.zero;
             }
-            Debug.Log(mousePos);
             pl.AddForce(mousePos);
         }
 
@@ -183,4 +181,5 @@ public class PlayerMove : MonoBehaviour
         }
         
     }
+
 }
