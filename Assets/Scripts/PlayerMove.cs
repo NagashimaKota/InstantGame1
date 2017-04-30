@@ -15,26 +15,25 @@ public class PlayerMove : MonoBehaviour
     private Vector2 touchOrigin = new Vector2(-1.0f, -1.0f); //Beganの条件回避
     private Rigidbody2D pl;
 
+    private GameObject child;
 
     public Text ClearText;
     public Text OverText;
     public Text plHP;
     public Text emHP;
-
-    // Use this for initialization
+    
     void Start()
     {
-
         pl = GetComponent<Rigidbody2D>();
         plHP.text = " PL Life: " + plLife;
         emHP.text = " EM Life: " + emLife;
 
         ClearText.gameObject.SetActive(false);
         OverText.gameObject.SetActive(false);
+
+        child = transform.FindChild("Arrow").gameObject;
     }
-
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (turn == true)
@@ -46,12 +45,13 @@ public class PlayerMove : MonoBehaviour
         emHP.text = "EM Life: " + emLife;
     }
 
+
     void Attack()
     {
-        
         //マウス操作用 Input
         if (Input.GetMouseButtonDown(0))
         {
+            child.transform.rotation = new Quaternion(0, 0, 180, 0);
             mousePos = Input.mousePosition;
         }
 
@@ -114,11 +114,20 @@ public class PlayerMove : MonoBehaviour
                 turn = false;
             }
             //xまたはyが弱い(最小設定)
-            else if (Math.Abs(mousePos.x) <= 20 || Math.Abs(mousePos.y) <= 20)
+            if (Math.Abs(mousePos.x) <= 20 || Math.Abs(mousePos.y) <= 20)
             {
                 mousePos = Vector2.zero;
             }
-            //Debug.Log(mousePos);
+            else
+            {
+                child.transform.localScale = new Vector2(1.0f, mousePos.y / 15);
+                if (mousePos.x * mousePos.y < 0)
+                    child.transform.Rotate(0, 0, Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+                else
+                    child.transform.Rotate(0, 0, -Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+                Debug.Log(Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+            }
+            
             pl.AddForce(mousePos);
         }
 
@@ -190,4 +199,5 @@ public class PlayerMove : MonoBehaviour
         }
         
     }
+
 }
