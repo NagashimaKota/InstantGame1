@@ -114,16 +114,20 @@ public class PlayerMove : MonoBehaviour
                 turn = false;
             }
             //xまたはyが弱い(最小設定)
-            else if (Math.Abs(mousePos.x) <= 20 || Math.Abs(mousePos.y) <= 20)
+            if (Math.Abs(mousePos.x) <= 20 || Math.Abs(mousePos.y) <= 20)
             {
                 mousePos = Vector2.zero;
             }
-            child.transform.localScale = new Vector2(1.0f, mousePos.y/15);
-            if(mousePos.x*mousePos.y<0)
-                child.transform.Rotate(0, 0, Math.Abs((float)Math.Atan(mousePos.y/mousePos.x)*180/(float)Math.PI));
             else
-                child.transform.Rotate(0, 0, -Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
-            Debug.Log(Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+            {
+                child.transform.localScale = new Vector2(1.0f, mousePos.y / 15);
+                if (mousePos.x * mousePos.y < 0)
+                    child.transform.Rotate(0, 0, Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+                else
+                    child.transform.Rotate(0, 0, -Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+                Debug.Log(Math.Abs((float)Math.Atan(mousePos.y / mousePos.x) * 180 / (float)Math.PI));
+            }
+            
             pl.AddForce(mousePos);
         }
 
@@ -150,23 +154,30 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    
+    public Vector2 PLPostion()
+    {
+        return this.transform.position;
+    }
 
     public bool EMTurn()
     {
         return turn;
     }
 
+
     public void PLTurn()
     {
         turn = true;
     }
 
+
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && emLife >= 0)
         {
             emLife -= 50;
-            Debug.Log(emLife);
+            //Debug.Log(emLife);
         }
         if (emLife <= 0)
         {
@@ -175,10 +186,10 @@ public class PlayerMove : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "E_attack")
+        if (other.tag == "E_attack" && plLife >= 0)
         {
             plLife -= 5;
-            Debug.Log(plLife);
+            //Debug.Log(plLife);
         }
         
         if (plLife<=0)

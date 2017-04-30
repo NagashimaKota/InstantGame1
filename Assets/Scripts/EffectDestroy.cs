@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EffectDestroy : MonoBehaviour {
-    
+
+    private AudioSource audio;
 
  	void Start () {
-        
+        audio = GetComponent<AudioSource>();
 	}
     void Update () {
         
@@ -18,8 +19,11 @@ public class EffectDestroy : MonoBehaviour {
         
         if (col.tag == "Player")
         {
+            audio.PlayOneShot(audio.clip); 
             Destroy(this.gameObject);
+            
         }
+        
     }
 
     void OnTriggerExit2D(Collider2D col2)
