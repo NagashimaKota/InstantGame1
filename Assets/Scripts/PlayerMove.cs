@@ -118,7 +118,7 @@ public class PlayerMove : MonoBehaviour
             {
                 mousePos = Vector2.zero;
             }
-            Debug.Log(mousePos);
+            //Debug.Log(mousePos);
             pl.AddForce(mousePos);
         }
 
@@ -145,23 +145,30 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    
+    public Vector2 PLPostion()
+    {
+        return this.transform.position;
+    }
 
     public bool EMTurn()
     {
         return turn;
     }
 
+
     public void PLTurn()
     {
         turn = true;
     }
 
+
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && emLife >= 0)
         {
             emLife -= 50;
-            Debug.Log(emLife);
+            //Debug.Log(emLife);
         }
         if (emLife <= 0)
         {
@@ -170,10 +177,10 @@ public class PlayerMove : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "E_attack")
+        if (other.tag == "E_attack" && plLife >= 0)
         {
             plLife -= 5;
-            Debug.Log(plLife);
+            //Debug.Log(plLife);
         }
         
         if (plLife<=0)

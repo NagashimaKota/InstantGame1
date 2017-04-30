@@ -7,29 +7,57 @@ public class EnemyAttack : MonoBehaviour {
     public GameObject attackPrefab;
     private GameObject player;
 
+    private Vector2 plPosA = Vector2.zero;
+    private Vector2 plPosB = Vector2.zero;
+    private Vector2 sa = new Vector2(0.001f, 0.001f);
+
     private bool turn = true;
+    private float time = 0;
     private int buretNum = 10;
 
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
+
     }
 	
 	// Update is called once per frame
 	void Update () {
+        PlayerMove pl_turn = player.GetComponent<PlayerMove>();
+        turn = pl_turn.EMTurn();
 
-        PlayerMove pl_sc = player.GetComponent<PlayerMove>();
-        turn = pl_sc.EMTurn();
+        time += Time.deltaTime;
 
-
-        if (turn == false)
+        if (time >= 1)
         {
             
-            //Debug.Log("False");
-            //Attack();
-            Invoke( "Attack", 2);
-            pl_sc.PLTurn();
+            PlayerMove pl_sc = player.GetComponent<PlayerMove>();
+            /*
+            plPosB = pl_sc.PLPostion() - plPosA;
+
+            plPosB.x = Mathf.Abs(plPosB.x);
+            plPosA.y = Mathf.Abs(plPosB.y);
+
+            Debug.Log(plPosA);
+            Debug.Log(plPosB);
+            */
+
+            if (plPosA != pl_sc.PLPostion())
+            {
+                plPosA = pl_sc.PLPostion();
+            }
+            else
+            {
+                if (turn == false)
+                {
+                    Attack();
+                    pl_sc.PLTurn();
+                }
+                
+            }
+            time = 0;
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
